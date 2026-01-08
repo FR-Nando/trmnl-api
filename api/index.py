@@ -7,7 +7,7 @@ def get_json():
     # Le test le plus simple du monde
     return jsonify({
         "merge_variables": {
-            "MESSAGE": "CONNEXION10 OK"
+            "MESSAGE": "CONNEXION11 OK"
         }
     })
 
