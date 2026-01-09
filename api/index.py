@@ -5,11 +5,14 @@ app = Flask(__name__)
 @app.route('/api/trmnl', methods=['GET'])
 def get_json():
     # ==========================================
-    # 1. ZONE DE TEXTE (A mettre à jour au besoin)
+    # 1. ZONE DE TEXTE
     # ==========================================
     
     # Infos générales
-    nom_de_la_salle = "VI.126" 
+    nom_de_la_salle = "VI.126"
+    
+    # NOUVEAU : Message d'information en bas de page
+    message_info = "Toute réunion sera supprimée si la salle reste vide 15 mn après le début de réunion"
     
     # Infos : RÉUNION EN COURS
     reunion_actuelle = {
@@ -27,22 +30,19 @@ def get_json():
         "creneau": "18h00 - 19h00"
     }
 
-    # ==========================================
-    # 2. ZONE IMAGE (QR CODE FIXE)
-    # ==========================================
-    
-    # Votre image stockée sur GitHub
+    # Image QR Code (Lien fixe GitHub)
     mon_image_qr = "https://github.com/FR-Nando/trmnl-api/blob/main/qrcode.png?raw=true"
 
     # ==========================================
-    # 3. ENVOI AU TRMNL
+    # 2. ENVOI AU TRMNL
     # ==========================================
     return jsonify({
         "merge_variables": {
             "VAR_SALLE": nom_de_la_salle,
-            
-            # C'est ici que l'image fixe est envoyée
             "VAR_QR": mon_image_qr,
+            
+            # La nouvelle variable
+            "INFOS": message_info,
             
             "TITRE": reunion_actuelle["titre"],
             "QUI": reunion_actuelle["organisateur"],
