@@ -4,42 +4,44 @@ app = Flask(__name__)
 
 @app.route('/api/trmnl', methods=['GET'])
 def get_json():
-    # --- VOS DONNÉES ---
+    # --- 1. VOS DONNÉES À MODIFIER ---
     donnees = {
-        "salle": "SA.126",
-        "qr_link": "https://votre-site.com",
+        "salle": "SA.126 (Fixe)",
+        "qr_link": "https://votre-site-de-resa.com",
         
         # Réunion actuelle
-        "c_titre": "Workshop UX Design",
-        "c_orga": "Julie M.",
-        "c_date": "Lundi 18 Janv.",
-        "c_heure": "16h00 - 18h00",
+        "titre": "Workshop UX Design",
+        "orga": "Julie M.",
+        "date": "Lundi 18 Janv.",
+        "heure": "16h00 - 18h00",
         
         # Réunion suivante
-        "n_titre": "Comité Direction", # J'ajoute un titre pour la suivante
-        "n_orga": "Équipe Tech",
-        "n_date": "Lundi 18 Janv.",
-        "n_heure": "18h00 - 19h00"
+        "next_titre": "Comité Direction",
+        "next_orga": "Équipe Tech",
+        "next_date": "Lundi 18 Janv.",
+        "next_heure": "18h00 - 19h00"
     }
     
+    # --- 2. GÉNÉRATION QR CODE ---
     qr_api = f"https://api.qrserver.com/v1/create-qr-code/?size=150x150&data={donnees['qr_link']}"
 
+    # --- 3. MAPPING STRICT POUR VOTRE HTML ---
     return jsonify({
         "merge_variables": {
+            # Variables appelées directement {{ VAR_... }}
             "VAR_SALLE": donnees['salle'],
             "VAR_QR": qr_api,
             
-            # Variables Actuelles
-            "TITRE": donnees['c_titre'],
-            "QUI": donnees['c_orga'],
-            "DATE": donnees['c_date'],
-            "HEURE": donnees['c_heure'],
+            # Variables appelées via {{ merge_variables.XXX }}
+            "TITRE": donnees['titre'],
+            "QUI": donnees['orga'],
+            "DATE": donnees['date'],
+            "HEURE": donnees['heure'],
             
-            # Variables Suivantes
-            "NEXT_TITRE": donnees['n_titre'],
-            "NEXT_QUI": donnees['n_orga'],
-            "NEXT_DATE": donnees['n_date'],
-            "NEXT_HEURE": donnees['n_heure']
+            "NEXT_TITRE": donnees['next_titre'],
+            "NEXT_QUI": donnees['next_orga'],
+            "NEXT_DATE": donnees['next_date'],
+            "NEXT_HEURE": donnees['next_heure']
         }
     })
 
